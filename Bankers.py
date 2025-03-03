@@ -33,5 +33,27 @@ max_allocation_required = np.array([[7, 5, 3],
 instances_available = total_resource_instance - np.sum(instances_allocated, axis=0)
 
 remaining_need = max_allocation_required - instances_allocated
-
 print(remaining_need)
+
+def BankersAlgorithm(instances_available, remaining_need, visited, sequence):
+    found = False  
+
+    for i in range(num_processes):
+        if not visited[i] and np.all(remaining_need[i] <= instances_available):
+            visited[i] = True  
+            new_available = instances_available + instances_allocated[i]  
+            BankersAlgorithm(new_available, remaining_need, visited, sequence + [f"P{i}"])  
+            visited[i] = False 
+            found = True  
+
+
+    if not found:  
+        print(" -> ".join(sequence)) 
+            
+        
+
+print("Safe Sequence:")
+visited = np.zeros(num_processes, dtype=bool)
+BankersAlgorithm(instances_available, remaining_need, visited, [])
+
+# print(remaining_need)
